@@ -130,25 +130,32 @@ export default function Hero() {
         data-hero-content
         className="container-page relative flex h-full flex-col justify-end pb-16 md:pb-20"
       >
-        <p
-          data-hero-fade
-          className="section-tag mb-6 text-rust-bright"
-        >
-          {hero.eyebrow}
-        </p>
-
-        <h1
-          data-hero-title
-          className="max-w-5xl text-display font-semibold text-white"
-          style={{ opacity: 0 }}
-        >
-          {hero.title.join(" ")}
+        {/* Un singur <h1>, cu două linii care fac lucruri diferite: linia
+            mică spune ce facem și unde (cuvintele după care se caută), cea
+            mare rămâne sloganul din logo. Designul rămâne neatins, dar
+            titlul paginii nu mai e o frază pe care o poate scrie oricine. */}
+        <h1 className="optical-left max-w-5xl">
+          <span
+            data-hero-fade
+            className="section-tag mb-6 block text-rust-bright"
+          >
+            {hero.eyebrow}
+          </span>
+          {/* separator textual: fără el, cele două linii se citesc lipite
+              („…județul BihorConstruim încredere") în textContent */}{" "}
+          <span
+            data-hero-title
+            className="block text-display font-semibold text-white"
+            style={{ opacity: 0 }}
+          >
+            {hero.title.join(" ")}
+          </span>
         </h1>
 
         <div className="mt-10 flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
           <p
             data-hero-fade
-            className="max-w-xl text-base leading-relaxed text-white/70 md:text-lg"
+            className="max-w-md text-sm leading-relaxed text-white/65 md:text-base"
           >
             {hero.lead}
           </p>

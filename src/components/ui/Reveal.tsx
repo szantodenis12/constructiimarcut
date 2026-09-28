@@ -44,6 +44,17 @@ export default function Reveal({
         el.style.opacity = "1";
         el.style.transform = "translate3d(0, 0, 0)";
         observer.disconnect();
+
+        // `will-change` ține elementul pe un strat de compoziție separat.
+        // Lăsat acolo după ce animația s-a terminat, costă memorie degeaba și
+        // încurcă redesenarea la hover a lucrurilor dinăuntru.
+        el.addEventListener(
+          "transitionend",
+          () => {
+            el.style.willChange = "auto";
+          },
+          { once: true },
+        );
       },
       { threshold: 0.12, rootMargin: "0px 0px -8% 0px" },
     );

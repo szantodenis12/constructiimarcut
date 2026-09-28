@@ -12,7 +12,7 @@ export default function Values() {
               {values.eyebrow}
             </p>
           </Reveal>
-          <SplitReveal as="h2" className="text-h2 font-semibold balance">
+          <SplitReveal as="h2" className="optical-left text-h2 font-semibold balance">
             {values.title}
           </SplitReveal>
         </div>

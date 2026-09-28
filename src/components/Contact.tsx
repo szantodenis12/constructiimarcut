@@ -4,7 +4,8 @@ import { useState } from "react";
 import Reveal from "./ui/Reveal";
 import SplitReveal from "./ui/SplitReveal";
 import { ArrowIcon } from "./ui/ArrowLink";
-import { contact, company, principles, TODO } from "@/lib/content";
+import PrincipleIcon from "./ui/PrincipleIcon";
+import { contact, company, principles } from "@/lib/content";
 
 type Status = "idle" | "sending" | "sent" | "error";
 
@@ -38,10 +39,15 @@ export default function Contact() {
   }
 
   const details = [
-    { label: "Telefon", value: company.phone, href: company.phoneHref },
+    ...company.phones.map((phone) => ({
+      label: `Telefon ${phone.role.toLowerCase()}`,
+      value: phone.number,
+      href: phone.href,
+    })),
     { label: "E-mail", value: company.email, href: `mailto:${company.email}` },
-    { label: "Adresă", value: company.address, href: null },
-  ].filter((d) => d.value !== TODO);
+    // în contact e de ajuns localitatea; adresa completă stă în subsol, la datele legale
+    { label: "Zonă", value: company.city, href: null },
+  ];
 
   return (
     <section id="contact" className="scroll-mt-24 bg-paper-2 py-20 md:py-32">
@@ -52,7 +58,7 @@ export default function Contact() {
               {contact.eyebrow}
             </p>
           </Reveal>
-          <SplitReveal as="h2" className="text-h2 font-semibold balance">
+          <SplitReveal as="h2" className="optical-left text-h2 font-semibold balance">
             {contact.title}
           </SplitReveal>
           <Reveal delay={0.12}>
@@ -61,17 +67,18 @@ export default function Contact() {
             </p>
           </Reveal>
 
-          {/* Reia principiile din textul clientului — ține coloana plină și
-              înainte ca datele de contact să fie completate. */}
+          {/* Reia principiile din textul clientului, ca semnale de încredere
+              lângă formular. */}
           <Reveal delay={0.16}>
-            <ul className="mt-10 space-y-3 border-t border-ink/12 pt-8">
+            <ul className="mt-10 space-y-4 border-t border-ink/12 pt-8">
               {principles.map((principle) => (
-                <li
-                  key={principle.title}
-                  className="flex items-baseline gap-3 text-sm text-ink-mute md:text-base"
-                >
-                  <span className="text-rust">—</span>
-                  {principle.title}
+                <li key={principle.title} className="flex items-center gap-4">
+                  <span className="grid size-10 shrink-0 place-items-center bg-rust-tint text-rust">
+                    <PrincipleIcon name={principle.icon} className="size-5" />
+                  </span>
+                  <span className="text-sm text-ink md:text-base">
+                    {principle.title}
+                  </span>
                 </li>
               ))}
             </ul>

@@ -20,7 +20,7 @@ export default function Services() {
                 Servicii
               </p>
             </Reveal>
-            <SplitReveal as="h2" className="text-h2 font-semibold balance">
+            <SplitReveal as="h2" className="optical-left text-h2 font-semibold balance">
               Ce construim, de la fundație până la ultimul detaliu
             </SplitReveal>
           </div>
@@ -35,26 +35,38 @@ export default function Services() {
         <ul className="mt-14 md:mt-20">
           {services.map((service, i) => (
             <Reveal key={service.title} as="li" delay={0.03 * i}>
+              {/* Un singur ritm pentru tot rândul: aceeași durată și aceeași
+                  accelerare peste tot. Înainte erau trei animații pornite
+                  simultan, cu 500ms, 500ms și 700ms și accelerări diferite —
+                  de acolo venea senzația de mișcare dezordonată.
+
+                  Titlul nu se mai translatează: mutarea unui text de 40px
+                  semibold îl forțează să fie redesenat la poziții
+                  subpixel în fiecare cadru și tremură. Se mișcă doar săgeata,
+                  care e mică, iar restul feedbackului vine din culoare și
+                  fundal — proprietăți pe care browserul le face ieftin. */}
               <Link
                 href="/#contact"
-                className="group relative flex items-start gap-6 overflow-hidden border-t border-ink/12 py-8 md:grid md:grid-cols-12 md:items-baseline md:gap-10 md:py-10"
+                className="group relative -mx-4 flex items-start gap-6 border-t border-ink/12 px-4 py-8 transition-colors duration-300 ease-out hover:bg-ink/[0.04] md:grid md:grid-cols-12 md:items-baseline md:gap-10 md:py-10"
               >
-                <span className="text-xs tabular-nums text-rust md:col-span-1">
+                <span className="text-xs tabular-nums text-rust transition-colors duration-300 ease-out md:col-span-1">
                   0{i + 1}
                 </span>
 
-                <h3 className="text-[clamp(1.5rem,3vw,2.5rem)] font-medium leading-tight tracking-tight transition-[transform,color] duration-500 group-hover:translate-x-2 group-hover:text-rust md:col-span-5">
-                  {service.title}
+                <h3 className="text-[clamp(1.5rem,3vw,2.5rem)] font-medium leading-tight tracking-tight transition-colors duration-300 ease-out group-hover:text-rust md:col-span-5">
+                  {/* învelișul inline-block ține linia exact cât textul;
+                      pusă direct în h3, s-ar întinde pe toată coloana */}
+                  <span className="relative inline-block">
+                    {service.title}
+                    <span className="absolute -bottom-1 left-0 h-px w-full origin-left scale-x-0 bg-rust transition-transform duration-300 ease-out group-hover:scale-x-100" />
+                  </span>
                 </h3>
 
                 <p className="hidden max-w-md text-sm leading-relaxed text-ink-mute md:col-span-5 md:block md:text-base">
                   {service.body}
                 </p>
 
-                <ArrowIcon className="ml-auto size-6 shrink-0 text-ink-mute transition-[transform,color] duration-500 group-hover:translate-x-1 group-hover:-translate-y-1 group-hover:text-rust md:col-span-1" />
-
-                {/* linie care se trage de la stânga la hover */}
-                <span className="absolute inset-x-0 top-0 h-px origin-left scale-x-0 bg-rust transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-x-100" />
+                <ArrowIcon className="ml-auto size-6 shrink-0 text-ink-mute transition-[transform,color] duration-300 ease-out group-hover:translate-x-1 group-hover:-translate-y-1 group-hover:text-rust md:col-span-1" />
               </Link>
             </Reveal>
           ))}

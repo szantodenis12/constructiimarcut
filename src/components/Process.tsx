@@ -17,7 +17,7 @@ export default function Process() {
               Proces
             </p>
           </Reveal>
-          <SplitReveal as="h2" className="text-h2 font-semibold balance">
+          <SplitReveal as="h2" className="optical-left text-h2 font-semibold balance">
             Cum arată o lucrare, etapă cu etapă
           </SplitReveal>
           <Reveal delay={0.12}>

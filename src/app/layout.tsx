@@ -1,6 +1,9 @@
 import type { Metadata, Viewport } from "next";
 import { Archivo } from "next/font/google";
 import SmoothScroll from "@/components/ui/SmoothScroll";
+import WhatsAppButton from "@/components/WhatsAppButton";
+import StructuredData from "@/components/StructuredData";
+import { SITE_URL } from "@/lib/site";
 import { company } from "@/lib/content";
 import "./globals.css";
 
@@ -19,25 +22,22 @@ const archivo = Archivo({
   display: "swap",
 });
 
-// TODO: de înlocuit cu domeniul real înainte de lansare.
-const SITE_URL = "https://constructiimarcut.ro";
-
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: `${company.legalName} — Construcții case, renovări și finisaje`,
+    default: `${company.legalName} — Construcții case și renovări în Oradea, Bihor`,
     template: `%s — ${company.name}`,
   },
   description:
-    "Construcții Mărcuț SRL execută case la roșu și la cheie, structuri pe cadre de lemn, fundații, șarpante, renovări și finisaje. Construim încredere. Ridicăm viitorul.",
+    "Firmă de construcții din Oradea, județul Bihor, activă din 2003. Case la roșu și la cheie, structuri pe cadre de lemn, fundații, șarpante, învelitori, renovări și finisaje. Tarife de manoperă publicate.",
   openGraph: {
     type: "website",
     locale: "ro_RO",
     url: SITE_URL,
     siteName: company.legalName,
-    title: `${company.legalName} — Construcții case și renovări`,
+    title: `${company.legalName} — Construcții case și renovări în Oradea`,
     description:
-      "De la fundație și structură până la finisaje. Seriozitate, calitatea execuției și respectarea angajamentelor asumate.",
+      "Firmă de construcții din Oradea, jud. Bihor, activă din 2003. De la fundație și structură până la finisaje.",
     images: [{ url: "/images/casa-finalizata-amurg.jpg", width: 1536, height: 1024 }],
   },
   icons: {
@@ -64,6 +64,8 @@ export default function RootLayout({
           Sari la conținut
         </a>
         {children}
+        <WhatsAppButton />
+        <StructuredData />
       </body>
     </html>
   );

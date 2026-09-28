@@ -112,31 +112,26 @@
     background: var(--color-paper-2);
   }
 
-  /* Eticheta tehnică de secțiune, în spiritul unei planșe de execuție. */
+  /* Eticheta de secțiune: doar tipografie, fără liniuță înaintea textului. */
   .section-tag {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.6rem;
+    display: block;
     font-size: 0.6875rem;
     font-weight: 600;
     letter-spacing: 0.22em;
     text-transform: uppercase;
   }
-  .section-tag::before {
-    content: "";
-    width: 2.25rem;
-    height: 1px;
-    background: currentColor;
-  }
 
-  /* Caroiaj subțire de planșă, pentru fundalurile care altfel rămân pustii. */
-  .blueprint-grid {
-    background-image: linear-gradient(
-      to right,
-      color-mix(in srgb, var(--color-ink) 8%, transparent) 1px,
-      transparent 1px
-    );
-    background-size: 25% 100%;
+  /**
+   * Aliniere optică pentru titlurile mari.
+   *
+   * Fiecare glifă are un spațiu propriu la stânga, proporțional cu corpul de
+   * literă. La 52px titlul pornea cu 2,5px mai la dreapta decât eticheta de
+   * 11px de deasupra lui, deși ambele cutii încep exact la aceeași margine.
+   * Corecția e în `em`, deci se scalează singură: merge la fel pe titlul de
+   * 95px din hero și pe cel de 30px de pe mobil.
+   */
+  .optical-left {
+    margin-left: -0.06em;
   }
 
   .line-mask {

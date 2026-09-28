@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import Logo from "./Logo";
-import { nav, company, TODO } from "@/lib/content";
+import { nav, company } from "@/lib/content";
 
 /**
  * Header minimal, fără bară: doar logo-ul și butonul de meniu.
@@ -21,6 +21,7 @@ export default function Header() {
   const [light, setLight] = useState(true); // hero-ul e închis la culoare
   const overlayRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
+  const timelineRef = useRef<gsap.core.Timeline | null>(null);
 
   useEffect(() => {
     const sections = Array.from(
@@ -62,35 +63,79 @@ export default function Header() {
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
-  // Deschiderea meniului: panoul coboară, apoi linkurile urcă pe rând.
+  /**
+   * Un singur timeline, construit o dată și rulat înainte la deschidere,
+   * înapoi la închidere.
+   *
+   * Varianta anterioară îl reconstruia la fiecare schimbare de stare și rula
+   * doar pe deschidere — de aici lipsa oricărei animații la închidere. În plus,
+   * React scria `clipPath` inline pe același element pe care îl anima GSAP;
+   * cele două se călcau pe picioare la fiecare frame, de unde sacadarea.
+   * Acum stilul inițial e static în JSX, iar mai departe GSAP e singurul
+   * care atinge `clipPath` și `visibility`.
+   */
   useEffect(() => {
     const overlay = overlayRef.current;
     if (!overlay) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     const links = overlay.querySelectorAll("[data-menu-item]");
-    const ctx = gsap.context(() => {
-      if (open) {
-        gsap
-          .timeline()
-          .fromTo(
-            overlay,
-            { clipPath: "inset(0% 0% 100% 0%)" },
-            { clipPath: "inset(0% 0% 0% 0%)", duration: 0.75, ease: "expo.inOut" },
-          )
-          .from(
-            links,
-            { yPercent: 108, duration: 0.85, ease: "expo.out", stagger: 0.06 },
-            0.28,
-          );
-      }
-    }, overlay);
+    const aside = overlay.querySelectorAll("[data-menu-aside]");
 
-    return () => ctx.revert();
+    const tl = gsap.timeline({
+      paused: true,
+      onStart: () => gsap.set(overlay, { visibility: "visible", willChange: "clip-path" }),
+      onReverseComplete: () =>
+        gsap.set(overlay, { visibility: "hidden", willChange: "auto" }),
+    });
+
+    tl.fromTo(
+      overlay,
+      { clipPath: "inset(0% 0% 100% 0%)" },
+      { clipPath: "inset(0% 0% 0% 0%)", duration: 0.7, ease: "power4.inOut" },
+    )
+      .fromTo(
+        links,
+        { yPercent: 110 },
+        { yPercent: 0, duration: 0.7, ease: "power3.out", stagger: 0.055 },
+        "-=0.34",
+      )
+      .fromTo(
+        aside,
+        { opacity: 0, y: 18 },
+        { opacity: 1, y: 0, duration: 0.5, ease: "power2.out" },
+        "-=0.42",
+      );
+
+    timelineRef.current = tl;
+    return () => {
+      tl.kill();
+      timelineRef.current = null;
+    };
+  }, []);
+
+  useEffect(() => {
+    const overlay = overlayRef.current;
+    if (!overlay) return;
+    const tl = timelineRef.current;
+
+    // fără timeline = prefers-reduced-motion: doar apare și dispare
+    if (!tl) {
+      gsap.set(overlay, {
+        visibility: open ? "visible" : "hidden",
+        clipPath: "inset(0% 0% 0% 0%)",
+      });
+      return;
+    }
+
+    // La închidere timeline-ul se derulează invers, deci cortina pleacă ultima.
+    // Rulat în viteză normală ar dura aproape o secundă; dublând ritmul,
+    // ieșirea se încheie în ~0,7s și nu mai pare că stă degeaba.
+    if (open) tl.timeScale(1).play();
+    else tl.timeScale(2).reverse();
   }, [open]);
 
   const onLight = light || open;
-  const hasPhone = company.phone !== TODO;
 
   return (
     <>
@@ -144,12 +189,14 @@ export default function Header() {
         </div>
       </header>
 
+      {/* Starea inițială e statică: de aici încolo doar GSAP scrie clipPath și
+          visibility, altfel React i-ar suprascrie fiecare frame. */}
       <div
         ref={overlayRef}
         className={`fixed inset-0 z-40 bg-ink text-white ${open ? "" : "pointer-events-none"}`}
         style={{
-          clipPath: open ? "inset(0% 0% 0% 0%)" : "inset(0% 0% 100% 0%)",
-          visibility: open ? "visible" : "hidden",
+          clipPath: "inset(0% 0% 100% 0%)",
+          visibility: "hidden",
         }}
       >
         <div className="container-page grid h-full grid-cols-1 items-center gap-12 pt-24 lg:grid-cols-12">
@@ -173,7 +220,7 @@ export default function Header() {
             </ul>
           </nav>
 
-          <div className="lg:col-span-4 lg:col-start-9">
+          <div data-menu-aside className="lg:col-span-4 lg:col-start-9">
             <p className="text-xs uppercase tracking-[0.2em] text-white/40">
               {company.legalName}
             </p>
@@ -181,14 +228,14 @@ export default function Header() {
               {company.tagline}
             </p>
 
-            {hasPhone && (
-              <a
-                href={company.phoneHref}
-                className="mt-8 block text-2xl transition-colors duration-300 hover:text-rust-bright"
-              >
-                {company.phone}
-              </a>
-            )}
+            {/* În meniu apare doar numărul principal; al doilea ar dilua
+                acțiunea exact în momentul în care omul vrea să sune. */}
+            <a
+              href={company.phones[0].href}
+              className="mt-8 block text-2xl transition-colors duration-300 hover:text-rust-bright"
+            >
+              {company.phones[0].number}
+            </a>
 
             <Link
               href="/#contact"

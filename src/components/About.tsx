@@ -17,12 +17,20 @@ export default function About() {
         {/* Titlul ocupă toată lățimea — varianta pe o treime lăsa dreapta goală. */}
         <SplitReveal
           as="h2"
-          className="text-[clamp(2.25rem,5.6vw,5rem)] font-semibold leading-[1.02] tracking-[-0.03em]"
+          className="optical-left text-[clamp(2.25rem,5.6vw,5rem)] font-semibold leading-[1.02] tracking-[-0.03em]"
         >
           {about.title}
         </SplitReveal>
 
-        <div className="mt-12 grid gap-8 md:mt-16 md:grid-cols-3 md:gap-10">
+        {/* Definiția firmei, ca prim paragraf vizibil după titlu: cine, ce,
+            unde, din când — formulată ca să poată fi citată ca atare. */}
+        <Reveal delay={0.08}>
+          <p className="mt-8 max-w-3xl text-lg leading-relaxed text-ink md:mt-10 md:text-xl">
+            {about.lead}
+          </p>
+        </Reveal>
+
+        <div className="mt-12 grid gap-8 md:grid-cols-3 md:gap-10">
           {about.body.map((paragraph, i) => (
             <Reveal key={paragraph} delay={0.06 * i} as="p" className="text-base leading-relaxed text-ink-mute md:text-lg">
               {paragraph}

@@ -6,17 +6,72 @@ import SplitReveal from "@/components/ui/SplitReveal";
 import { ButtonLink } from "@/components/ui/ArrowLink";
 import { priceGroups, pricingMeta, notIncluded, technicalNote } from "@/lib/pricing";
 import { company } from "@/lib/content";
+import { SITE_URL } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "Tarife de execuție",
+  title: "Tarife de execuție în Oradea și jud. Bihor",
   description:
-    "Tarifele de manoperă pentru lucrări de acoperiș, izolații, pereți și sistem pluvial. Prețuri nete, fără TVA, materialele nu sunt incluse.",
+    "Tarife de manoperă pentru acoperiș, izolații, pereți și sistem pluvial, în Oradea și județul Bihor. Prețuri nete, fără TVA; materialele nu sunt incluse.",
   alternates: { canonical: "/preturi" },
 };
+
+/**
+ * Tarifele sunt cel mai concret conținut de pe site: cifre cu unitate de
+ * măsură. Marcate ca oferte cu `UnitPriceSpecification`, pot fi citate exact,
+ * cu tot cu mențiunea că sunt fără TVA.
+ */
+function PricingStructuredData() {
+  const data = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "OfferCatalog",
+        "@id": `${SITE_URL}/preturi#tarife`,
+        name: "Tarife de execuție — Construcții Mărcuț SRL",
+        provider: { "@id": `${SITE_URL}/#organizatie` },
+        itemListElement: priceGroups.flatMap((group) =>
+          group.rows.map((row) => ({
+            "@type": "Offer",
+            name: row.item,
+            category: group.title,
+            areaServed: { "@type": "AdministrativeArea", name: "Județul Bihor" },
+            priceSpecification: {
+              "@type": "UnitPriceSpecification",
+              price: row.price,
+              priceCurrency: pricingMeta.currency,
+              unitText: row.unit,
+              valueAddedTaxIncluded: pricingMeta.vatIncluded,
+            },
+          })),
+        ),
+      },
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Acasă", item: SITE_URL },
+          {
+            "@type": "ListItem",
+            position: 2,
+            name: "Tarife de execuție",
+            item: `${SITE_URL}/preturi`,
+          },
+        ],
+      },
+    ],
+  };
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }}
+    />
+  );
+}
 
 export default function PreturiPage() {
   return (
     <>
+      <PricingStructuredData />
       <Header />
       <main id="main">
         {/* Antet închis la culoare: headerul are nevoie de un fundal pe care
@@ -29,7 +84,7 @@ export default function PreturiPage() {
 
             <SplitReveal
               as="h1"
-              className="max-w-4xl text-display font-semibold"
+              className="optical-left max-w-4xl text-display font-semibold"
             >
               Cât costă manopera, pe fiecare tip de lucrare
             </SplitReveal>
@@ -62,12 +117,15 @@ export default function PreturiPage() {
               },
             ].map((item, i) => (
               <Reveal key={item.title} delay={0.05 * i}>
-                <h2 className="flex items-baseline gap-3 text-h3 font-semibold">
-                  <span className="text-xs tabular-nums opacity-60">
+                {/* Cifra stă în afara <h2>, nu doar ascunsă cu aria-hidden:
+                    aria-hidden curăță arborele de accesibilitate, dar textul
+                    rămâne în textContent, deci titlul se citea "01Doar manoperă". */}
+                <div className="flex items-baseline gap-3">
+                  <span aria-hidden="true" className="text-xs tabular-nums opacity-60">
                     0{i + 1}
                   </span>
-                  {item.title}
-                </h2>
+                  <h2 className="text-h3 font-semibold">{item.title}</h2>
+                </div>
                 <p className="mt-3 max-w-xs text-sm leading-relaxed text-white/80">
                   {item.body}
                 </p>
@@ -87,7 +145,7 @@ export default function PreturiPage() {
                       <span className="text-xs font-semibold tabular-nums text-rust">
                         {group.index}
                       </span>
-                      <h2 className="mt-3 text-h2 font-semibold">{group.title}</h2>
+                      <h2 className="optical-left mt-3 text-h2 font-semibold">{group.title}</h2>
                       {group.note && (
                         <p className="mt-3 max-w-xs text-sm leading-relaxed text-ink-mute">
                           {group.note}
@@ -163,7 +221,7 @@ export default function PreturiPage() {
                 <Reveal>
                   <p className="section-tag mb-6 text-rust-bright">Excluderi</p>
                 </Reveal>
-                <SplitReveal as="h2" className="text-h2 font-semibold balance">
+                <SplitReveal as="h2" className="optical-left text-h2 font-semibold balance">
                   Ce nu intră în tarifele de mai sus
                 </SplitReveal>
                 <Reveal delay={0.12}>
@@ -196,7 +254,7 @@ export default function PreturiPage() {
         {/* CTA */}
         <section className="bg-paper-2 py-20 md:py-28">
           <div className="container-page max-w-3xl">
-            <SplitReveal as="h2" className="text-h2 font-semibold balance">
+            <SplitReveal as="h2" className="optical-left text-h2 font-semibold balance">
               Vrei un preț pentru lucrarea ta?
             </SplitReveal>
             <Reveal delay={0.1}>

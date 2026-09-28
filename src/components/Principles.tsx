@@ -48,7 +48,7 @@ export default function Principles() {
               </span>
 
               <div className="relative z-10 mt-10 lg:mt-16">
-                <h3 className="text-h2 font-semibold balance">{item.title}</h3>
+                <h3 className="optical-left text-h2 font-semibold balance">{item.title}</h3>
                 <p className="mt-5 max-w-md text-base leading-relaxed opacity-80 md:text-lg">
                   {item.body}
                 </p>

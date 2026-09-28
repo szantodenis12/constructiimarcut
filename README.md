@@ -58,22 +58,55 @@ Structura de secțiuni urmează rnbprojects.co.nz; tipografia mare, parallax-ul
 și panourile sticky colorate urmează gerdingbuilders.com. Fontul referinței
 (Neue Haas Grotesk Display) e licențiat Adobe.
 
+## Date de identificare
+
+Preluate din registrul ANAF (interogare după CUI 15546079), nu de pe un
+agregator — se pot reverifica oricând la `webservicesp.anaf.ro`:
+
+| | |
+|---|---|
+| Denumire | Construcții Mărcuț S.R.L. |
+| CUI | RO 15546079 (plătitor TVA din 30.06.2003) |
+| Reg. Com. | J05/817/2003 |
+| Sediu social | Str. Henrik Ibsen nr. 3, bl. AN 2, et. 1, ap. 6, Oradea, jud. Bihor, 410241 |
+| Înregistrat | 26.06.2003 · firmă activă |
+| CAEN principal | 4312 — Lucrări de pregătire a terenului |
+
+**De discutat:** CAEN-ul principal declarat este 4312 (pregătirea terenului),
+nu 4120 (construcții rezidențiale). Nu apare pe site, dar merită clarificat cu
+clientul dacă are CAEN-uri secundare care acoperă ce prezentăm.
+
+## Protecția consumatorului
+
+În subsol sunt linkurile ANPC: [SAL](https://www.anpc.ro/sal) și
+[eServicii / reclamații](https://eservicii.anpc.ro/).
+
+Platforma europeană **SOL/ODR nu este linkată intenționat**: și-a încetat
+activitatea la 20.07.2025, prin Regulamentul (UE) 2024/3228. Multe site-uri
+românești încă o afișează, dar linkul e mort.
+
+## ⚠ Adresa de e-mail este provizorie
+
+`contact@constructiimarcut.ro` (în `src/lib/content.ts`) este **doar presupusă**.
+Depinde de un domeniu care încă nu e cumpărat și de o căsuță care nu există:
+până atunci, orice mesaj trimis acolo se pierde.
+
+Trei locuri trebuie schimbate în același timp când se stabilește adresa reală:
+
+1. `company.email` — `src/lib/content.ts` (adresa afișată pe site)
+2. `SITE_URL` — `src/app/layout.tsx` (momentan tot `constructiimarcut.ro`)
+3. `CONTACT_TO` — `.env.local` (unde ajung mesajele din formular, setat separat)
+
 ## Ce mai trebuie de la client
 
-Toate câmpurile marcate `TODO_CLIENT` în `src/lib/content.ts`:
-
-- [ ] telefon (+ varianta `tel:` pentru `phoneHref`)
-- [ ] adresă de e-mail pentru cererile din formular
-- [ ] adresă / zona în care lucrează
-- [ ] CUI și nr. Reg. Com. (obligatorii legal în footer)
-- [ ] linkuri Facebook / Instagram
-- [ ] domeniul real — de înlocuit `SITE_URL` în `src/app/layout.tsx`
+- [ ] confirmarea domeniului și a adresei de e-mail (vezi mai sus)
+- [ ] cheile Resend, ca formularul de contact să trimită efectiv
 
 De confirmat cu clientul:
 
 - [ ] **Lista de servicii** din `src/lib/content.ts` e dedusă din pozele primite.
 - [ ] **Etapele procesului** — la fel.
-- [ ] **Tarifele din `/preturi`** — vezi secțiunea de mai jos.
+- [ ] **Tarifele din `/preturi`** — vezi secțiunea dedicată mai jos.
 - [ ] Nu există testimoniale reale, deci nu am pus secțiune de testimoniale.
 - [ ] Nu am inventat cifre (ani de experiență, număr de lucrări).
 

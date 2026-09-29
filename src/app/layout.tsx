@@ -3,6 +3,7 @@ import { Archivo } from "next/font/google";
 import SmoothScroll from "@/components/ui/SmoothScroll";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import StructuredData from "@/components/StructuredData";
+import Analytics from "@/components/Analytics";
 import { SITE_URL } from "@/lib/site";
 import { company } from "@/lib/content";
 import "./globals.css";
@@ -66,6 +67,7 @@ export default function RootLayout({
         {children}
         <WhatsAppButton />
         <StructuredData />
+        <Analytics />
       </body>
     </html>
   );

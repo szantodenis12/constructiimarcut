@@ -30,7 +30,7 @@ export default function WhatsAppButton() {
       rel="noreferrer"
       aria-label={`Scrie-ne pe WhatsApp la ${company.phones[0].number}`}
       // z-30 îl ține sub overlay-ul meniului (z-40), ca să nu plutească peste el
-      className={`group fixed right-5 bottom-5 z-30 flex items-center gap-3 bg-ink px-4 py-4 text-white shadow-lg transition-[background-color,opacity,transform] duration-500 ease-out hover:bg-rust md:right-8 md:bottom-8 ${
+      className={`wa-fab group fixed right-5 bottom-5 z-30 flex items-center gap-3 bg-ink px-4 py-4 text-white shadow-lg transition-[background-color,opacity,transform] duration-500 ease-out hover:bg-rust md:right-8 md:bottom-8 ${
         visible
           ? "translate-y-0 opacity-100"
           : "pointer-events-none translate-y-4 opacity-0"

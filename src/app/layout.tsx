@@ -4,6 +4,7 @@ import SmoothScroll from "@/components/ui/SmoothScroll";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import StructuredData from "@/components/StructuredData";
 import Analytics from "@/components/Analytics";
+import CookieConsent from "@/components/CookieConsent";
 import { SITE_URL } from "@/lib/site";
 import { company } from "@/lib/content";
 import "./globals.css";
@@ -68,6 +69,7 @@ export default function RootLayout({
         <WhatsAppButton />
         <StructuredData />
         <Analytics />
+        <CookieConsent />
       </body>
     </html>
   );

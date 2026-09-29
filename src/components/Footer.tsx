@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Logo from "./Logo";
 import { ArrowIcon } from "./ui/ArrowLink";
+import ConsentSettingsLink from "./ConsentSettingsLink";
 import { company, nav, anpc } from "@/lib/content";
 
 /**
@@ -194,6 +195,9 @@ export default function Footer() {
                 </a>
               </li>
             ))}
+            <li>
+              <ConsentSettingsLink className="transition-colors duration-300 hover:text-rust-bright" />
+            </li>
           </ul>
 
           <p className="text-white/30">{company.tagline}</p>

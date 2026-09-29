@@ -134,6 +134,15 @@
     margin-left: -0.06em;
   }
 
+
+  /* Cât bannerul de consimțământ e deschis, butonul de WhatsApp se retrage:
+     pe telefon cele două se suprapun în colțul de jos. */
+  html[data-consent-open] .wa-fab {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(1rem);
+  }
+
   .line-mask {
     display: block;
     overflow: hidden;
